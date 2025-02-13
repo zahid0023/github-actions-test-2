@@ -6,7 +6,7 @@ on:
 
 jobs:
     test-job-1:
-        runs-on: ubntu-latest
+        runs-on: ubuntu-latest
         steps:
             - name: Print event name
               run: echo "${{github.event_name}}"
