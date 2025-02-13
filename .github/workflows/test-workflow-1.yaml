@@ -13,7 +13,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Exit Step
-              run: exit 1;
+              run: exit 0;
 
             - name: Hello 2
               run: echo "Hello 2!";
