@@ -13,5 +13,6 @@ jobs:
         runs-on: windows-latest
         steps:
             - name: Print OS
+              shell: bash
               run: |
                 echo $RUNNER_OS
