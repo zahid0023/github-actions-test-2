@@ -1,10 +1,11 @@
 name: Test Workflow 2
 
-on: push
+on: 
+    push:
+    pull_request: 
 
 jobs:
     test-job-1:
-        name: Test Job 1
         runs-on: ubntu-latest
         steps:
             - name: Print event name
