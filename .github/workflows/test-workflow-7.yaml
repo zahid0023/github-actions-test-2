@@ -1,15 +1,12 @@
 name: Test Workflow 7
 
 on:
-    pull_request:
     workflow_dispatch:  
 
 jobs:
     test-job-1:
         runs-on: ubuntu-latest
         steps:
-            - name: Exit 1
-              run: exit 1
             - name: Skip
               if: ${{success()}}
               run: echo "This is printed if the previous step is successful"
