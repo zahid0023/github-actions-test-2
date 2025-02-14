@@ -1,0 +1,23 @@
+name: Test Workflow 7
+
+on:
+    pull_request: 
+
+jobs:
+    test-job-1:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Exit 1
+              run: exit 1
+            - name: Skip
+              if: ${{success()}}
+              run: echo "This is printed if the previous step is successful"
+            - name: Execute
+              if: ${{failure()}}
+              run: echo "This runs"
+            - name: Not Cancelled
+              if: ${{!cancelled()}}
+              run: echo "Runs if not cancelled"
+            - name: Cancelled
+              if: ${{cancelled()}}
+              run: echo "Run if cancelled"
