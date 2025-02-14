@@ -1,1 +1,1 @@
-Test Github Actions 2
+Test Github Actions 2 edited to test the workflow triggered on pull request to the main
