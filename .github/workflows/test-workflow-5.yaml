@@ -5,6 +5,7 @@ on:
         types: 
             - opened
             - synchronize
+            - closed
         branches: 
             - main
 
@@ -13,4 +14,4 @@ jobs:
     echo:
         runs-on: ubuntu-latest
         steps: 
-            - run: echo "Running wheneve a PR is open or synchronized and base branch is main"
+            - run: echo "Running wheneve a PR is open or synchronized or close and base branch is main"
