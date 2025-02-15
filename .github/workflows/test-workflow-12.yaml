@@ -10,7 +10,7 @@ jobs:
       matrix:
         os: ["ubuntu-latest", "windows-latest"]
         version: [8, 11, 17, 21]
-    runs-on: ${{ matrix.version }}
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/setup-java
         with:
