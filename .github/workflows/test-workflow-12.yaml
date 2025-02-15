@@ -5,6 +5,7 @@ on:
 
 jobs:
   test-multi-matrix-job:
+    name: ${{ matrix.num1 }} - ${{ matrix.num2 }} - ${{ matrix.num3 }}
     strategy:
       fail-fast: false
       matrix:
@@ -13,4 +14,4 @@ jobs:
         num3: [9, 10, 11, 12]
     runs-on: ubuntu-latest
     steps:
-      - run: echo $(( ${{matrix.num1}} * ${{matrix.num2}} * ${{matrix.num3}}))
+      - run: echo $(( ${{matrix.num1}} * ${{matrix.num2}} * ${{matrix.num3}} ))
