@@ -5,6 +5,7 @@ on:
 
 jobs:
   test-multi-matrix-job:
+    name: ${{matrix.os}} ${{matrix.version}}
     strategy:
       fail-fast: false
       matrix:
