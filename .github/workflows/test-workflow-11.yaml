@@ -1,0 +1,17 @@
+name: Test workflow 10
+
+on:
+  push:
+
+jobs:
+  test-matrix:
+    runs-on: linux-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [8, 11, 17, 21]
+    steps:
+      - uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: ${{ matrix.version }}

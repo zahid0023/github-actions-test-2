@@ -1,0 +1,62 @@
+name: Test CI/CD Workflow  # Defines the workflow name, visible in the GitHub Actions UI
+
+on: workflow_dispatch # Triggers this workflow on any push event
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Runs the job on the latest Ubuntu runner
+
+    env:
+      DOCKER_IMAGE_VERSION: "4.1.0"  # Defines an environment variable for the Docker image version
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        # Fetches the repository's code so the workflow can use it
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"  # Specifies the Java distribution
+          java-version: "17"  # Installs JDK 17
+        # Ensures Java 17 is installed, required for building the Maven project
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository  # Caches the Maven dependencies directory
+          key: maven-${{ hashFiles('**/pom.xml') }}  # Uses a hash of pom.xml as the cache key
+          restore-keys: maven-
+        # Caches dependencies to speed up Maven builds, avoiding re-downloading dependencies every time
+
+      - name: Build with Maven
+        run: mvn clean package
+        # Runs the Maven build process, cleaning the project and packaging it
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        # Logs in to Docker Hub using credentials stored in GitHub Secrets
+        # Best practice: Never store credentials in the repository, always use GitHub Secrets
+
+      - name: Build Docker Image
+        run: docker build -t root00023/test-ci-cd-repository:latest -t root00023/test-ci-cd-repository:${DOCKER_IMAGE_VERSION} .
+        # Builds a Docker image with two tags:
+        # 1. "latest" - Represents the most recent build
+        # 2. "${DOCKER_IMAGE_VERSION}" - A versioned tag (e.g., "1.0.0")
+
+      - name: Check if Tag Already Exists
+        run: |
+          if docker manifest inspect root00023/test-ci-cd-repository:${DOCKER_IMAGE_VERSION} >/dev/null 2>&1 ; then
+            echo "Error: Tag ${DOCKER_IMAGE_VERSION} already exists! Change the version please."
+            exit 1  # Stops the workflow if the tag already exists
+          fi;
+        # Checks if the tag already exists on Docker Hub
+        # If it does, the workflow fails to prevent overwriting an existing image
+
+      - name: Push Docker Image
+        run: |
+          docker push root00023/test-ci-cd-repository:${DOCKER_IMAGE_VERSION}
+          docker push root00023/test-ci-cd-repository:latest
+        # Pushes the Docker image to Docker Hub
+        # Pushes both the versioned tag (e.g., "1.0.0") and the "latest" tag
+
